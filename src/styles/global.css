@@ -18,8 +18,11 @@
   body {
     @apply bg-white text-slate-900 font-sans antialiased;
   }
-  
-  h1, h2, h3, h4 {
+
+  h1,
+  h2,
+  h3,
+  h4 {
     @apply text-forest-900;
   }
 }
@@ -54,13 +57,13 @@
     @apply max-w-none text-lg leading-8 text-slate-700;
   }
 
-  .rich-content > :first-child,
-  .rich-content article > :first-child {
+  .rich-content> :first-child,
+  .rich-content article> :first-child {
     @apply mt-0;
   }
 
-  .rich-content > :last-child,
-  .rich-content article > :last-child {
+  .rich-content> :last-child,
+  .rich-content article> :last-child {
     @apply mb-0;
   }
 
