@@ -10,6 +10,13 @@
   "summary": "Full stack software engineer with 5+ years of experience who codes for work and for fun. I learnt the fundamentals before AI tools took off, so I know when to trust them and when to write it myself. In my current role I've developed a structured Claude Code workflow: detailed markdown specs, CLI execution, custom QA, and manual review. It's the kind of process thinking I bring to everything I build.",
   "experience": [
     {
+      "company": "Gyoza Flights",
+      "location": "Sydney",
+      "role": "Full Stack Engineer",
+      "period": "May 2026 — current",
+      "description": "Delivering performant, scalable features across the frontend and API for a flight deals platform serving Australian points and miles enthusiasts. Trusted to make independent technical and architectural decisions across the full stack, from scoping and system design through to deployment."
+    },
+    {
       "company": "The ChurchCo",
       "location": "Sydney",
       "role": "Full Stack Engineer",
