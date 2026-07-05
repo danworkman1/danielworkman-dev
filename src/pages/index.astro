@@ -6,8 +6,10 @@ import projects from '../data/projects.json';
 
 const { name, title, summary, experience, links } = profile;
 
-// Use the first 4 projects from projects.json for the home page
-const featuredProjects = projects.slice(0, 4);
+// Show the 4 most recent projects on the home page, newest first
+const featuredProjects = [...projects]
+	.sort((a, b) => b.date.localeCompare(a.date))
+	.slice(0, 4);
 const turnstileSiteKey = (env as CloudflareEnv).TURNSTILE_SITE_KEY;
 ---
 

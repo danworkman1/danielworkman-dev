@@ -4,13 +4,16 @@ import profile from '../../data/profile.json';
 import projects from '../../data/projects.json';
 
 const { name } = profile;
+
+// Newest projects first
+const sortedProjects = [...projects].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <Layout title={`Projects | ${name}`}>
 	<section class="section-container py-24">
 		<h1 class="text-6xl font-bold text-slate-900 mb-12">All Projects</h1>
 		<div class="grid grid-cols-1 gap-12">
-			{projects.map((project) => {
+			{sortedProjects.map((project) => {
 				const isComingSoon = project.comingSoon ?? false;
 				const ProjectCard = isComingSoon ? 'div' : 'a';
 
