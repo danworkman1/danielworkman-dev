@@ -2,9 +2,6 @@
   "name": "tested-trappist",
   "type": "module",
   "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
   "scripts": {
     "cf-typegen": "wrangler types",
     "predev": "pnpm cf-typegen",
@@ -24,5 +21,8 @@
   },
   "devDependencies": {
     "wrangler": "4.107.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp", "workerd"]
   }
 }

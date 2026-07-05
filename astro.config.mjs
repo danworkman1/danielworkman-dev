@@ -6,6 +6,10 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   adapter: cloudflare(),
   output: 'server',
+  redirects: {
+    // Old slug from when this post covered Astro 5. Keep the URL alive.
+    '/blog/building-with-astro-5': '/blog/building-with-astro-6',
+  },
   vite: {
     plugins: [tailwindcss()],
   },
