@@ -5,8 +5,8 @@ import projects from '../../data/projects.json';
 
 const { name } = profile;
 
-// Newest projects first
-const sortedProjects = [...projects].sort((a, b) => b.date.localeCompare(a.date));
+// Curated order (lowest `order` first)
+const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
 ---
 
 <Layout title={`Projects | ${name}`}>
