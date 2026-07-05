@@ -2,11 +2,11 @@
   "name": "tested-trappist",
   "type": "module",
   "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
   "scripts": {
+    "cf-typegen": "wrangler types",
+    "predev": "pnpm cf-typegen",
     "dev": "astro dev",
+    "prebuild": "pnpm cf-typegen",
     "build": "astro build",
     "postbuild": "cp .assetsignore dist/.assetsignore",
     "deploy": "pnpm build && pnpm exec wrangler deploy",
@@ -14,12 +14,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/cloudflare": "^13.7.0",
     "@tailwindcss/vite": "4",
-    "astro": "^5.18.1",
+    "astro": "^6.4.8",
     "tailwindcss": "4"
   },
   "devDependencies": {
-    "wrangler": "4.59.2"
+    "wrangler": "4.107.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp", "workerd"]
   }
 }
