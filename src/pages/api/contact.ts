@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 
-type ContactEnv = App.Locals['runtime']['env'];
+type ContactEnv = CloudflareEnv;
 
 type TurnstileResponse = {
   success: boolean;
@@ -145,7 +146,7 @@ const sendContactEmail = async (payload: ContactPayload, env: ContactEnv) => {
   }
 };
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   const acceptsJson =
     request.headers.get('accept')?.includes('application/json') ||
     request.headers.get('x-requested-with') === 'fetch';
@@ -174,7 +175,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return fail('Please complete the verification challenge.');
     }
 
-    const turnstile = await verifyTurnstile(turnstileToken, request, locals.runtime.env);
+    const turnstile = await verifyTurnstile(turnstileToken, request, env);
 
     if (!turnstile.success) {
       console.warn('Turnstile validation rejected contact submission', turnstile['error-codes']);
@@ -182,7 +183,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return fail('Verification failed. Please try again.');
     }
 
-    await sendContactEmail(payload, locals.runtime.env);
+    await sendContactEmail(payload, env);
 
     return acceptsJson
       ? json({ message: 'Thanks, your message has been sent.' })

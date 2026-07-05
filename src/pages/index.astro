@@ -1,4 +1,5 @@
 ---
+import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
 import profile from '../data/profile.json';
 import projects from '../data/projects.json';
@@ -7,7 +8,7 @@ const { name, title, summary, experience, links } = profile;
 
 // Use the first 4 projects from projects.json for the home page
 const featuredProjects = projects.slice(0, 4);
-const turnstileSiteKey = Astro.locals.runtime.env.TURNSTILE_SITE_KEY;
+const turnstileSiteKey = (env as CloudflareEnv).TURNSTILE_SITE_KEY;
 ---
 
 <Layout title={`${name} | ${title}`}>
