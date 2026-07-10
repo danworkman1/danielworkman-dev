@@ -8,9 +8,6 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
-  "vars": {
-    "TURNSTILE_SITE_KEY": "0x4AAAAAADJxsSLnDyrnFSRN"
-  },
   "observability": {
     "enabled": true
   }
