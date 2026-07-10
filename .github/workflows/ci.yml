@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test # Vitest units (helper + middleware transform)
+      - run: pnpm build
+      - run: pnpm exec wrangler deploy --dry-run
+      # `pnpm test:e2e` (wrangler-dev edge checks) is run locally, not in CI —
+      # it boots a dev server. The middleware logic it exercises is unit-covered
+      # above; the immutable /_astro/* header is the adapter's responsibility.

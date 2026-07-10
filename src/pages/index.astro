@@ -1,8 +1,10 @@
 ---
-import { env } from 'cloudflare:workers';
+export const prerender = true;
+
 import Layout from '../layouts/Layout.astro';
 import profile from '../data/profile.json';
 import projects from '../data/projects.json';
+import { TURNSTILE_SITE_KEY } from '../config';
 
 const { name, title, summary, experience, links } = profile;
 
@@ -10,7 +12,7 @@ const { name, title, summary, experience, links } = profile;
 const featuredProjects = [...projects]
 	.sort((a, b) => a.order - b.order)
 	.slice(0, 4);
-const turnstileSiteKey = (env as CloudflareEnv).TURNSTILE_SITE_KEY;
+const turnstileSiteKey = TURNSTILE_SITE_KEY;
 ---
 
 <Layout title={`${name} | ${title}`}>

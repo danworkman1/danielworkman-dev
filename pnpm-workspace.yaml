@@ -1,0 +1,5 @@
+# pnpm 11+ reads the build-script allowlist here, not from package.json's "pnpm" field.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

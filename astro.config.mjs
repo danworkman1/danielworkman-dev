@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   adapter: cloudflare(),
   output: 'server',
+  compressHTML: true, // pin old behaviour; Astro 7 default flips true -> 'jsx'
   redirects: {
     // Old slug from when this post covered Astro 5. Keep the URL alive.
     '/blog/building-with-astro-5': '/blog/building-with-astro-6',
