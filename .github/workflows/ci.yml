@@ -18,6 +18,9 @@ jobs:
           node-version: '22.12.0'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+      - run: pnpm test # Vitest units (helper + middleware transform)
       - run: pnpm build
       - run: pnpm exec wrangler deploy --dry-run
+      # `pnpm test:e2e` (wrangler-dev edge checks) is run locally, not in CI —
+      # it boots a dev server. The middleware logic it exercises is unit-covered
+      # above; the immutable /_astro/* header is the adapter's responsibility.

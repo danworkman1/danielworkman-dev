@@ -3,7 +3,7 @@
 //     dist/client/_headers; we verify it survives to the served response)
 //   - POST /api/contact is never cached (the src/middleware.ts no-store rule)
 //   - content pages are prerendered to static HTML and served 200 text/html
-// Run with: pnpm test:e2e
+// Run with: pnpm test:e2e  (must run from the repo root — paths are cwd-relative)
 import { spawn, execSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -38,8 +38,11 @@ if (!assetName) {
 }
 
 console.log('› starting wrangler dev…');
+// detached so we can kill the whole process group (pnpm -> wrangler -> workerd)
+// on exit — SIGTERM to the pnpm wrapper alone leaves workerd holding the port.
 const dev = spawn('pnpm', ['exec', 'wrangler', 'dev', '--port', String(PORT)], {
   stdio: ['ignore', 'ignore', 'inherit'],
+  detached: true,
 });
 
 try {
@@ -74,7 +77,11 @@ try {
   assert(page.status === 200, `/blog returns 200 (got: ${page.status})`);
   assert((page.headers.get('content-type') || '').includes('text/html'), `/blog is text/html`);
 } finally {
-  dev.kill('SIGTERM');
+  try {
+    process.kill(-dev.pid, 'SIGTERM'); // negative pid = kill the whole group
+  } catch {
+    dev.kill('SIGTERM');
+  }
 }
 
 if (failures > 0) {

@@ -4,6 +4,9 @@
   "compatibility_flags": ["global_fetch_strictly_public"],
   "name": "danielworkman-dev",
   "main": "@astrojs/cloudflare/entrypoints/server",
+  // Source config. At build, the @astrojs/cloudflare adapter emits
+  // dist/server/wrangler.json (assets -> dist/client, main -> entry.mjs) and
+  // wrangler follows that generated file — so don't "fix" ./dist to ./dist/client.
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

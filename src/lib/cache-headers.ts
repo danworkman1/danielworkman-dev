@@ -10,3 +10,24 @@ export function cacheControlFor(pathname: string): string | null {
   if (pathname.startsWith('/api/')) return 'no-store';
   return null;
 }
+
+/**
+ * Apply the path-based Cache-Control to a server-rendered response.
+ *
+ * Rebuilds the response with a fresh (mutable) Headers because responses from
+ * Response.redirect() — the contact form's no-JS fallback path — carry an
+ * immutable headers guard that would throw on .set(). Returns the original
+ * response object unchanged when no rule applies.
+ */
+export function applyCacheHeaders(pathname: string, response: Response): Response {
+  const cacheControl = cacheControlFor(pathname);
+  if (!cacheControl) return response;
+
+  const headers = new Headers(response.headers);
+  headers.set('Cache-Control', cacheControl);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
