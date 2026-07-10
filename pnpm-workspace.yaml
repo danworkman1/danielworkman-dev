@@ -7,3 +7,9 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - workerd
+
+# pnpm 11 replaces onlyBuiltDependencies with per-package build policies.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
