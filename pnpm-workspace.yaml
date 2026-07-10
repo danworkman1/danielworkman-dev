@@ -1,5 +1,9 @@
-# pnpm 11+ reads the build-script allowlist here, not from package.json's "pnpm" field.
-allowBuilds:
-  esbuild: true
-  sharp: true
-  workerd: true
+# Keep the root project explicit for pnpm 10, which is used by Cloudflare Builds.
+packages:
+  - "."
+
+# pnpm 10+ reads the build-script allowlist from the workspace config.
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
