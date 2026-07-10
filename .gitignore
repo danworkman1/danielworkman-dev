@@ -29,3 +29,7 @@ pnpm-debug.log*
 
 # local-only notes (personal reference, not published)
 *.local.md
+
+# superpowers scratch (implementation plans, ledger) — local only
+docs/superpowers/
+.superpowers/
