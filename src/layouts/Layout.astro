@@ -18,6 +18,23 @@ const { title, description = "Daniel Workman's professional portfolio and work p
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<!-- Google tag (gtag.js). Gated on the production hostname client-side:
+		     the home page is prerendered, so a build-time (server) gate would bake
+		     one answer into every deploy — localhost and previews must not fire (#15). -->
+		<script is:inline>
+			(function () {
+				if (!['danielworkman.dev', 'www.danielworkman.dev'].includes(location.hostname)) return;
+				var s = document.createElement('script');
+				s.async = true;
+				s.src = 'https://www.googletagmanager.com/gtag/js?id=G-VPT85FS3M3';
+				document.head.appendChild(s);
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				window.gtag = gtag;
+				gtag('js', new Date());
+				gtag('config', 'G-VPT85FS3M3');
+			})();
+		</script>
 	</head>
 	<body>
 		<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
