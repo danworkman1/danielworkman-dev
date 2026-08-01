@@ -35,6 +35,18 @@ const { title, description = "Daniel Workman's professional portfolio and work p
 				gtag('config', 'G-VPT85FS3M3');
 			})();
 		</script>
+		<!-- Sentry error monitoring (#17). Same client-side production-hostname
+		     gate as GA4 above; the SDK is dynamic-imported so localhost and
+		     preview visits never fetch it or send events. -->
+		<script>
+			if (['danielworkman.dev', 'www.danielworkman.dev'].includes(location.hostname)) {
+				const { init } = await import('@sentry/browser');
+				init({
+					dsn: 'https://133caf76f5cdea6f96c1b90bd579f0f8@o4511833618448384.ingest.de.sentry.io/4511833626968144',
+					environment: 'production',
+				});
+			}
+		</script>
 	</head>
 	<body>
 		<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">

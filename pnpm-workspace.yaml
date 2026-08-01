@@ -4,12 +4,14 @@ packages:
 
 # pnpm 10+ reads the build-script allowlist from the workspace config.
 onlyBuiltDependencies:
+  - "@sentry/cli"
   - esbuild
   - sharp
   - workerd
 
 # pnpm 11 replaces onlyBuiltDependencies with per-package build policies.
 allowBuilds:
+  '@sentry/cli': true
   esbuild: true
   sharp: true
   workerd: true
