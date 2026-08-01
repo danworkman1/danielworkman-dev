@@ -62,7 +62,9 @@ Client errors report to Sentry (`daniel-workmsn/danielworkmandev`, EU region),
 gated to the production hostname the same way as GA4 — localhost and previews
 never load the SDK. For readable stack traces, export `SENTRY_AUTH_TOKEN`
 (org auth token with `project:releases` scope, created in Sentry → Settings →
-Auth Tokens) before `pnpm build` on the deploying machine: the build then
+Auth Tokens) wherever the deploy build runs — the Cloudflare Workers Builds
+build variables for pushes to main, or the local shell for manual
+`pnpm deploy`: the build then
 uploads the hidden source maps and deletes them from `dist/`. Without the
 token the build skips the upload and `.assetsignore` keeps the leftover
 `.map` files off the CDN.
