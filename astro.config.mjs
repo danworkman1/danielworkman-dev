@@ -16,14 +16,18 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
       // Uploads source maps so Sentry stack traces are readable (#17). Only
-      // active where SENTRY_AUTH_TOKEN is set (the deploying machine) — CI
-      // and everyday local builds skip the upload entirely.
+      // active where SENTRY_AUTH_TOKEN is set — Workers Builds on pushes to
+      // main — so CI and everyday local builds skip the upload entirely.
       sentryVitePlugin({
-        org: 'daniel-workmsn',
+        org: 'daniel-workman',
         project: 'danielworkmandev',
         authToken: process.env.SENTRY_AUTH_TOKEN,
         disable: !process.env.SENTRY_AUTH_TOKEN,
         telemetry: false,
+        // Workers Builds sets WORKERS_CI_COMMIT_SHA. The plugin injects the
+        // release into the bundle, so the browser SDK tags events with it
+        // without init() naming one.
+        release: { name: process.env.WORKERS_CI_COMMIT_SHA },
         sourcemaps: {
           filesToDeleteAfterUpload: ['dist/**/*.map'],
         },
