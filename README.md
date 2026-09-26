@@ -47,9 +47,13 @@ to purge. Cache headers:
 
 ## Deploy
 
+Production deploys happen in Cloudflare Workers Builds on every push to `main`
+(`pnpm run build` then `npx wrangler deploy`); other branches get a preview
+version. A manual deploy from a local shell:
+
 ```sh
-pnpm build
-pnpm exec wrangler deploy          # or: wrangler versions upload  (preview first)
+pnpm run deploy                    # not `pnpm deploy`, which is pnpm's own command
+pnpm build && pnpm exec wrangler versions upload   # preview first
 ```
 
 Turnstile (secret) and Resend values are Worker secrets, set with
@@ -58,16 +62,20 @@ Turnstile (secret) and Resend values are Worker secrets, set with
 
 ## Error monitoring
 
-Client errors report to Sentry (`daniel-workmsn/danielworkmandev`, EU region),
+Client errors report to Sentry (`daniel-workman/danielworkmandev`, EU region),
 gated to the production hostname the same way as GA4 — localhost and previews
 never load the SDK. For readable stack traces, export `SENTRY_AUTH_TOKEN`
 (org auth token with `project:releases` scope, created in Sentry → Settings →
 Auth Tokens) wherever the deploy build runs — the Cloudflare Workers Builds
-build variables for pushes to main, or the local shell for manual
-`pnpm deploy`: the build then
-uploads the hidden source maps and deletes them from `dist/`. Without the
-token the build skips the upload and `.assetsignore` keeps the leftover
-`.map` files off the CDN.
+build variables for pushes to main, or the local shell for a manual
+`pnpm run deploy`: the build then uploads the hidden source maps, tags them with
+the commit as the release, and deletes them from `dist/`. Without the token the
+build skips the upload and `.assetsignore` keeps the leftover `.map` files off
+the CDN.
+
+Server-side errors deliberately don't go to Sentry. The only dynamic route,
+`POST /api/contact`, catches its own failures and logs them, and Workers Logs
+keeps those.
 
 ## Project Structure
 
