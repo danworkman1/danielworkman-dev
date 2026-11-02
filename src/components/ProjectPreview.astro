@@ -1,0 +1,73 @@
+---
+interface Props { slug: string; title: string; }
+interface PreviewImage { src: string; alt: string; width: number; height: number; }
+interface Preview { layout?: 'phones' | 'terminal'; images: PreviewImage[]; }
+
+const { slug, title } = Astro.props;
+const previews: Record<string, Preview> = {
+  localore: {
+    layout: 'phones',
+    images: [
+      { src: '/projects/localore/discover.webp', alt: 'Localore app: discover stories about your surroundings', width: 620, height: 1347 },
+      { src: '/projects/localore/story-composing.webp', alt: 'Localore app: composing and narrating a story', width: 620, height: 1347 },
+    ],
+  },
+  'tfnsw-train-alerts': { images: [{ src: '/projects/tfnsw-train-alerts/homepage.webp', alt: 'Train Alerts homepage with station selection and alert setup', width: 2560, height: 1450 }] },
+  'album-tracker-cli': { layout: 'terminal', images: [{ src: '/projects/album-tracker-cli/top-10-suggestions.webp', alt: 'Album Tracker CLI showing personalised upcoming album suggestions', width: 1444, height: 1246 }] },
+  'set-and-forget-tennis-calendar': { images: [{ src: '/projects/set-and-forget-tennis-calendar/homepage.webp', alt: 'Grand Slam Calendar website with calendar subscription options', width: 1600, height: 1034 }] },
+  gymlogapp: {
+    layout: 'phones',
+    images: [
+      { src: '/projects/gym-log/session.png', alt: 'Gym Log app: workout exercises, sets, weights and repetitions', width: 1320, height: 2868 },
+      { src: '/projects/gym-log/progress.png', alt: 'Gym Log app: training progress', width: 1290, height: 2796 },
+    ],
+  },
+  htmltopdfconverter: { images: [{ src: '/projects/htmltopdfconverter/upload-tool.png', alt: 'HTML to PDF Converter: file upload and PDF output options', width: 1201, height: 486 }] },
+};
+const preview = previews[slug];
+const waveform = [18, 30, 46, 24, 56, 72, 40, 62, 90, 54, 76, 100, 64, 84, 48, 70, 94, 58, 36, 68, 44, 26, 38, 18];
+---
+
+<div class:list={['project-preview', { terminal: preview?.layout === 'terminal' }]}>
+  {preview?.layout === 'phones' ? (
+    <div class="preview-phones">
+      {preview.images.map(image => <img {...image} loading="lazy" decoding="async" />)}
+    </div>
+  ) : preview ? (
+    preview.images.map(image => <img class="preview-screen" {...image} loading="lazy" decoding="async" />)
+  ) : slug === 'soundcloud-mcp' ? (
+    <div class="mix-preview" role="img" aria-label="Festival lineup connected through SoundCloud MCP to a playlist of artist mixes">
+      <div class="mix-waveform" aria-hidden="true">{waveform.map(height => <span style={{ height: `${height}%` }} />)}</div>
+      <span class="mix-title">SoundCloud MCP</span>
+      <div class="mix-flow" aria-hidden="true"><span>Festival lineup</span><span>→</span><span>Artist mixes</span><span>→</span><span>Playlist</span></div>
+    </div>
+  ) : (
+    <span class="preview-fallback">{title}</span>
+  )}
+</div>
+
+<style>
+  .project-preview { height: var(--project-preview-height, 290px); flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--color-forest-50); }
+  .preview-screen { display: block; width: auto; height: auto; max-width: 90%; max-height: 88%; border-radius: 9px; border: 1px solid rgb(4 43 4 / .06); box-shadow: 0 12px 32px rgb(4 43 4 / .10); }
+  .preview-phones { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; gap: 22px; padding: 27px; }
+  .preview-phones img { width: auto; max-width: 40%; height: 100%; object-fit: contain; border-radius: 19px; border: 5px solid white; box-shadow: 0 14px 30px rgb(4 43 4 / .12); }
+  .preview-phones img:first-child { transform: translateY(22px); }
+  .preview-phones img:last-child { transform: translateY(-22px); }
+  .terminal { background: var(--color-slate-50); }
+  .terminal .preview-screen { width: 86%; height: 82%; object-fit: cover; object-position: top; }
+  .mix-preview { display: flex; flex-direction: column; align-items: center; width: 86%; padding: 26px 18px; border: 1px solid var(--color-forest-100); border-radius: 14px; background: white; box-shadow: 0 12px 32px rgb(4 43 4 / .06); }
+  .mix-waveform { display: flex; align-items: center; justify-content: center; height: 70px; width: 80%; gap: 5px; }
+  .mix-waveform span { flex: 1; max-width: 7px; border-radius: 4px; background: var(--color-forest-600); }
+  .mix-title { margin-top: 18px; color: var(--color-forest-900); font-size: 20px; font-weight: 700; letter-spacing: -.025em; }
+  .mix-flow { display: flex; align-items: center; gap: 12px; margin-top: 14px; font-size: 11px; color: var(--color-slate-600); }
+  .mix-flow > span:nth-child(even) { color: var(--color-forest-500); }
+  .preview-fallback { padding: 24px; font-size: 24px; font-weight: 700; color: var(--color-forest-700); text-align: center; }
+
+  @media (max-width: 900px) { .mix-flow { gap: 7px; font-size: 10px; } }
+  @media (max-width: 640px) {
+    .preview-phones { padding: 25px 24px; gap: 20px; }
+    .preview-phones img:first-child { transform: translateY(17px); }
+    .preview-phones img:last-child { transform: translateY(-17px); }
+    .mix-flow { gap: 8px; }
+  }
+</style>
