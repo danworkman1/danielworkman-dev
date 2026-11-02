@@ -26,6 +26,15 @@ pnpm build
 pnpm preview
 ```
 
+The homepage and Projects page use the shared `ProjectGallery` component: four
+featured projects on the homepage and the full curated collection on Projects.
+Cards use two columns on desktop and one on mobile, with previews configured in
+`src/components/ProjectPreview.astro`.
+
+The Gallery (B) design was chosen to show the work more clearly while keeping
+the site's existing colours, fonts and content. The design studies are archived
+on the local branch `prototypes/project-gallery-study`.
+
 ## Testing
 
 ```sh

@@ -1,0 +1,103 @@
+---
+import type projectData from '../data/projects.json';
+import ProjectPreview from './ProjectPreview.astro';
+
+interface Props {
+  projects: typeof projectData;
+  headingLevel?: 2 | 3;
+}
+
+const { projects, headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+---
+
+<ul class="project-gallery" role="list">
+  {projects.map(project => {
+    const isComingSoon = project.comingSoon ?? false;
+    const Card = isComingSoon ? 'div' : 'a';
+    const headingId = `project-${project.slug}`;
+
+    return <li>
+      <Card class:list={['gallery-card', { 'is-link': !isComingSoon }]} href={isComingSoon ? undefined : `/projects/${project.slug}`} aria-labelledby={headingId}>
+        <ProjectPreview slug={project.slug} title={project.title} />
+        <div class="gallery-copy">
+          {project.company && <p class="gallery-company">{project.company}</p>}
+          <ul class="gallery-tags" role="list" aria-label="Selected technologies">
+            {project.tech.slice(0, 3).map(tech => <li class="tag">{tech}</li>)}
+          </ul>
+          <Heading id={headingId} class="gallery-title">{project.title}</Heading>
+          <p class="gallery-description">{project.description}</p>
+          <span class="gallery-link">{isComingSoon ? 'Coming soon' : 'View project'} {!isComingSoon && <span aria-hidden="true">→</span>}</span>
+        </div>
+      </Card>
+    </li>;
+  })}
+</ul>
+
+<style>
+  .project-gallery {
+    --project-preview-height: 290px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .project-gallery > li { min-width: 0; }
+
+  .gallery-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-slate-100);
+    border-radius: 24px;
+    background: white;
+    transition: border-color .25s, box-shadow .25s;
+  }
+
+  .gallery-card.is-link:hover {
+    border-color: var(--color-forest-100);
+    box-shadow: 0 16px 45px rgb(4 43 4 / .05);
+  }
+
+  .gallery-card:focus-visible {
+    outline: 3px solid var(--color-forest-600);
+    outline-offset: 5px;
+  }
+
+  .gallery-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px;
+  }
+
+  .gallery-company { margin: 0 0 16px; font: 700 12px/1.5 var(--font-mono); letter-spacing: .15em; text-transform: uppercase; color: var(--color-forest-500); }
+  .gallery-tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .gallery-title { margin: 22px 0 20px; font-size: 28px; font-weight: 700; line-height: 1.15; letter-spacing: -.035em; color: var(--color-slate-900); text-wrap: balance; transition: color .2s; }
+  .gallery-description { margin: 0; color: var(--color-slate-600); font-size: 16px; line-height: 1.8; }
+  .gallery-link { display: inline-flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 25px; color: var(--color-forest-700); font-size: 14px; font-weight: 700; }
+  .gallery-link > span { transition: transform .2s; }
+  .gallery-card.is-link:hover .gallery-title { color: var(--color-forest-700); }
+  .gallery-card.is-link:hover .gallery-link > span { transform: translateX(4px); }
+
+  @media (max-width: 900px) {
+    .project-gallery { --project-preview-height: 245px; gap: 24px; }
+    .gallery-copy { padding: 26px; }
+    .gallery-title { font-size: 25px; }
+  }
+
+  @media (max-width: 640px) {
+    .project-gallery { --project-preview-height: 270px; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .gallery-title { font-size: 28px; margin-bottom: 16px; }
+    .gallery-tags { gap: 6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-card, .gallery-title, .gallery-link > span { transition: none; }
+  }
+</style>
